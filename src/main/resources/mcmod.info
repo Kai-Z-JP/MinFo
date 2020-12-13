@@ -1,0 +1,18 @@
+[
+    {
+        "modid": "MinFo",
+        "name": "MinFo",
+        "description": "Minfo Is Not FOntrenderer",
+        "version": "${version}",
+        "mcversion": "${mcversion}",
+        "url": "",
+        "updateUrl": "",
+        "authorList": [
+            "Kaiz_JP"
+        ],
+        "credits": "",
+        "logoFile": "",
+        "screenshots": [],
+        "dependencies": []
+    }
+]
