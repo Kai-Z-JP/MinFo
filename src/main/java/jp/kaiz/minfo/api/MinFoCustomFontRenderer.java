@@ -1,5 +1,8 @@
 package jp.kaiz.minfo.api;
 
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
+import jp.kaiz.minfo.FRData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.util.ResourceLocation;
@@ -11,8 +14,14 @@ import org.newdawn.slick.font.effects.ColorEffect;
 import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class MinFoCustomFontRenderer extends FontRenderer {
+    private static final List<FRData<?>> loadWaitList = new ArrayList<>();
+    private static final Map<String, MinFoCustomFontRenderer> loadedFonts = new HashMap<>();
     private UnicodeFont uFont;
 
     //必ずTTF
@@ -25,9 +34,10 @@ public class MinFoCustomFontRenderer extends FontRenderer {
                 this.uFont = new UnicodeFont(Font.createFont(Font.TRUETYPE_FONT, fontStream).deriveFont((float) fontSize));
                 this.loadJapaneseCharSets();
             }
-        } catch (FontFormatException | IOException | SlickException exception) {
-            throw new RuntimeException(exception);
+        } catch (FontFormatException | IOException | SlickException e) {
+            throw new RuntimeException(e);
         }
+        this.register(location.toString() + "," + fontSize);
     }
 
 
@@ -37,8 +47,9 @@ public class MinFoCustomFontRenderer extends FontRenderer {
         try {
             this.loadJapaneseCharSets();
         } catch (SlickException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
+        this.register(name + "," + fontSize);
     }
 
     private void loadJapaneseCharSets() throws SlickException {
@@ -48,6 +59,46 @@ public class MinFoCustomFontRenderer extends FontRenderer {
         this.uFont.addGlyphs(0x4e00, 0x9fc0); // Kanji
         this.uFont.getEffects().add(new ColorEffect(java.awt.Color.WHITE));
         this.uFont.loadGlyphs();
+    }
+
+    public static void loadFonts() {
+        if (FMLCommonHandler.instance().getSide() == Side.CLIENT) {
+            System.out.println("[MinFo] Loading Custom Fonts...");
+            loadWaitList.forEach(FRData::createFontRenderer);
+            loadWaitList.clear();
+            System.out.println("[MinFo] Loaded Custom Fonts!");
+        }
+    }
+
+    public static void addAsyncLoadFont(ResourceLocation location, int fontSize) {
+        System.out.println("[MinFo] Add async load font " + location.toString() + "," + fontSize);
+        loadWaitList.add(new FRData<>(location, fontSize));
+    }
+
+    public static void addAsyncLoadFont(String name, int fontSize) {
+        System.out.println("[MinFo] Add async load font " + name + "," + fontSize);
+        loadWaitList.add(new FRData<>(name, fontSize));
+    }
+
+    public void register(String id) {
+        System.out.println("[MinFo] Load Complete " + id);
+        loadedFonts.put(id, this);
+    }
+
+    public static MinFoCustomFontRenderer getCustomFontRenderer(ResourceLocation location, int fontSize) {
+        MinFoCustomFontRenderer fr = loadedFonts.get(location.toString() + "," + fontSize);
+        if (fr == null) {
+            loadedFonts.put(location + "," + fontSize, fr = new MinFoCustomFontRenderer(location, fontSize));
+        }
+        return fr;
+    }
+
+    public static MinFoCustomFontRenderer getCustomFontRenderer(String name, int fontSize) {
+        MinFoCustomFontRenderer fr = loadedFonts.get(name + "," + fontSize);
+        if (fr == null) {
+            loadedFonts.put(name + "," + fontSize, fr = new MinFoCustomFontRenderer(name, fontSize));
+        }
+        return fr;
     }
 
     @Override
