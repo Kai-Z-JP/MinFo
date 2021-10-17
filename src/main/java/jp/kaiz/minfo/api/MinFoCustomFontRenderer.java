@@ -18,7 +18,7 @@ public class MinFoCustomFontRenderer extends FontRenderer {
     //必ずTTF
     //OTFはTYPE2だから無理
     public MinFoCustomFontRenderer(ResourceLocation location, int fontSize) {
-        super(Minecraft.getMinecraft().gameSettings, new ResourceLocation("textures/font/ascii.png"), Minecraft.getMinecraft().getTextureManager(), false);
+        super(Minecraft.getMinecraft().gameSettings, null, null, false);
 
         try (InputStream fontStream = Minecraft.getMinecraft().getResourceManager().getResource(location).getInputStream()) {
             if (fontStream != null) {
@@ -32,7 +32,7 @@ public class MinFoCustomFontRenderer extends FontRenderer {
 
 
     public MinFoCustomFontRenderer(String name, int fontSize) {
-        super(Minecraft.getMinecraft().gameSettings, new ResourceLocation("textures/font/ascii.png"), Minecraft.getMinecraft().getTextureManager(), false);
+        super(Minecraft.getMinecraft().gameSettings, null, null, false);
         this.uFont = new UnicodeFont(new Font(name, Font.PLAIN, fontSize));
         try {
             this.loadJapaneseCharSets();
@@ -81,5 +81,9 @@ public class MinFoCustomFontRenderer extends FontRenderer {
     @Override
     public int getStringWidth(String p_78256_1_) {
         return this.uFont.getWidth(p_78256_1_) / 2;
+    }
+
+    @Override
+    protected void bindTexture(ResourceLocation location) {
     }
 }
