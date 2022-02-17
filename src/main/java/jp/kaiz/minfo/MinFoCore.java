@@ -25,7 +25,7 @@ public class MinFoCore {
     @SubscribeEvent
     public void onLoadWorld(WorldEvent.Load e) {
         if (e.world.isRemote) {
-            MinFoCustomFontRenderer.loadedFontList.forEach(MinFoCustomFontRenderer::loadJapaneseCharSets);
+            MinFoCustomFontRenderer.loadedFontList.forEach(MinFoCustomFontRenderer::loadCJKCharSets);
         }
     }
 }
