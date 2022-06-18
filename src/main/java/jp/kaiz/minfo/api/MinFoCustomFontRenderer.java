@@ -95,7 +95,7 @@ public class MinFoCustomFontRenderer extends FontRenderer {
     @Override
     public int getStringWidth(String p_78256_1_) {
         this.loadCJKCharSets();
-        return this.uFont.getWidth(p_78256_1_) / 2;
+        return this.uFont.getWidth(p_78256_1_);
     }
 
     @Override
