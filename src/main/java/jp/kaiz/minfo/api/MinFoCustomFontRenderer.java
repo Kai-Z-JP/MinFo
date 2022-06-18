@@ -53,6 +53,7 @@ public class MinFoCustomFontRenderer extends FontRenderer {
                 this.uFont.addGlyphs(0x3000, 0x30ff); // Hiragana + katakana + fullwidth punctuations
                 this.uFont.addGlyphs(0x4e00, 0x9fc0); // Kanji
                 this.uFont.addGlyphs(0xac00, 0xd7a3); // Korean
+                this.uFont.addGlyphs(0xff00, 0xff9f); // Halfwidth and Fullwidth Forms
                 this.uFont.getEffects().add(new ColorEffect(java.awt.Color.WHITE));
                 this.uFont.loadGlyphs();
                 this.glyphsLoaded = true;
