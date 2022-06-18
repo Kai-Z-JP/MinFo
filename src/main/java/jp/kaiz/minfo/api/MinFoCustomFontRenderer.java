@@ -82,6 +82,22 @@ public class MinFoCustomFontRenderer extends FontRenderer {
         }
     }
 
+    public void drawText(String string, int color) {
+        if (string != null) {
+            this.loadCJKCharSets();
+            GL11.glPushMatrix();
+            GL11.glRotatef(180.0f, 1.0f, 0.0f, 0.0f);
+            GL11.glEnable(GL11.GL_BLEND);
+            GL11.glDisable(GL11.GL_LIGHTING);
+            GL11.glDisable(GL11.GL_TEXTURE_2D);
+            this.uFont.drawString(0, 0, string, new org.newdawn.slick.Color(color));
+            GL11.glEnable(GL11.GL_TEXTURE_2D);
+            GL11.glEnable(GL11.GL_LIGHTING);
+            GL11.glDisable(GL11.GL_BLEND);
+            GL11.glPopMatrix();
+        }
+    }
+
     @Override
     public int drawStringWithShadow(String string, int x, int y, int color) {
         return drawString(string, x, y, color);
@@ -96,6 +112,10 @@ public class MinFoCustomFontRenderer extends FontRenderer {
     public int getStringWidth(String p_78256_1_) {
         this.loadCJKCharSets();
         return this.uFont.getWidth(p_78256_1_);
+    }
+
+    public int getTextWidth(String text) {
+        return this.getStringWidth(text);
     }
 
     @Override
