@@ -99,11 +99,6 @@ public class MinFoCustomFontRenderer extends FontRenderer {
     }
 
     @Override
-    public int drawStringWithShadow(String string, int x, int y, int color) {
-        return drawString(string, x, y, color);
-    }
-
-    @Override
     public int getCharWidth(char c) {
         return getStringWidth(Character.toString(c));
     }
